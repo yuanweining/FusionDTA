@@ -3,6 +3,7 @@
 ## Training
 *****************
 run command below to train FusionDTA
-  python training.py
+
+    python training.py
   
 ## testing
