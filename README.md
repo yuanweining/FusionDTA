@@ -1,7 +1,7 @@
 # FusionDTA: attention-based feature polymerizer and knowledge distillation for drug–target binding affinity prediction
 
 ## Data Preprocess
-You should unzip the zip package in the Data folder. Then you will get the following files:
+You should unzip the rar package in the Data folder. Then you will get the following files:
 * davis_test.csv
 * davis_train.csv
 * kiba_test.csv
