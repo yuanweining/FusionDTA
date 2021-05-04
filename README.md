@@ -25,7 +25,7 @@ run command below for validation.
 ## Knowledge distillation
 First you should create a folder for pretrained models, path = "FusionDTA/pretrained_models".
 
-Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/DAT_KD_best.pkl, or just use the trained model from "FusionDTA/save_models".
+Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/training_best.pkl, or just use the trained model from "FusionDTA/save_models".
 
 run command below to train FusionDTA-KD.
 
