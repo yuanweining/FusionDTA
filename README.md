@@ -29,6 +29,6 @@ Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/training_
 
 run command below to train FusionDTA-KD.
 
-    python training-KD.py
+    python training_KD.py
     
 You can test different scales of parameters of the student model, by setting different arguments in parser.
