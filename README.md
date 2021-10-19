@@ -27,7 +27,7 @@ Then you will get the following files:
 11-12: protein presentation from pretraining model (esm-1b).  
 
 ## Training
-First you should create a new folder for saved models, path = "FusionDTA/save_models".
+First you should create a new folder for saved models, path = "FusionDTA/saved_models".
 
 then run command below to train FusionDTA.
 
