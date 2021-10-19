@@ -1,23 +1,30 @@
 # FusionDTA: attention-based feature polymerizer and knowledge distillation for drug–target binding affinity prediction
 
 ## Data Preprocess
-You first need to generate the standard data, cold-start data and 5-fold cross-validation data. Run command as follows:
+You first need to generate the standard data, cold-start data and 5-fold cross-validation data from raw data. 
+Run command as follows:
     
     python datahelper.py
 
 Then you will get the following files:
-* davis_test.csv
-* davis_train.csv
-* kiba_test.csv
-* kiba_train.csv
-* davis_cold.csv
-* kiba_cold.csv
-* davis/davis_train_fold0-5.csv
-* davis/davis_test_fold0-5.csv
-* kiba/kiba_train_fold0-5.csv
-* kiba/kiba_test_fold0-5.csv
+* data/davis_test.csv
+* data/davis_train.csv
+* data/kiba_test.csv
+* data/kiba_train.csv
+* data/davis_cold.csv
+* data/kiba_cold.csv
+* data/davis/davis_train_fold0-5.csv
+* data/davis/davis_test_fold0-5.csv
+* data/kiba/kiba_train_fold0-5.csv
+* data/kiba/kiba_test_fold0-5.csv
+* davis.npz
+* kiba.npz
 
-The first four are the data from the baseline dataset and the last is the lookup table for the pre-trained protein.
+
+1~4: standard data
+5~6: cold-start data
+7~10: 5-fold cross-validation data
+11~12: protein presentation from pretraining model(esm-1b). 
 
 ## Training
 First you should create a new folder for trained models, path = "FusionDTA/save_models".
