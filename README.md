@@ -24,11 +24,10 @@ Then you will get the following files:
 1-4: standard data  
 5-6: cold-start data  
 7-10: 5-fold cross-validation data  
-11-12: protein presentation from pretraining model (esm-1b).  
+11-12: protein presentation from pretraining model (esm-1b https://diuyourmouse.cn/FusionDTA/training_best.pkl).  
 
 ## Training
-First you should create a new folder for saved models, path = "FusionDTA/saved_models".
-
+First you should create a new folder for saved models, path = "FusionDTA/saved_models".  
 then run command below to train FusionDTA.
 
     python training.py
@@ -54,10 +53,8 @@ run command below for validation.
     python validating.py 
 
 ## Knowledge distillation
-First you should create a folder for pretrained models, path = "FusionDTA/pretrained_models".
-
-Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/training_best.pkl, or just use the trained model from "FusionDTA/save_models".
-
+First you should create a folder for pretrained models, path = "FusionDTA/pretrained_models".  
+Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/training_best.pkl, or just use the trained model from "FusionDTA/save_models".  
 run command below to train FusionDTA-KD.
 
     python training_KD.py
