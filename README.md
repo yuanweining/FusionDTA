@@ -7,18 +7,18 @@ Run command as follows:
     python datahelper.py
 
 Then you will get the following files:
-* data/davis_test.csv
-* data/davis_train.csv
-* data/kiba_test.csv
-* data/kiba_train.csv
-* data/davis_cold.csv
-* data/kiba_cold.csv
-* data/davis/davis_train_fold0-5.csv
-* data/davis/davis_test_fold0-5.csv
-* data/kiba/kiba_train_fold0-5.csv
-* data/kiba/kiba_test_fold0-5.csv
-* davis.npz
-* kiba.npz
+1. data/davis_test.csv
+2. data/davis_train.csv
+3. data/kiba_test.csv
+4. data/kiba_train.csv
+5. data/davis_cold.csv
+6. data/kiba_cold.csv
+7. data/davis/davis_train_fold0-5.csv
+8. data/davis/davis_test_fold0-5.csv
+9. data/kiba/kiba_train_fold0-5.csv
+10. data/kiba/kiba_test_fold0-5.csv
+11. davis.npz
+12. kiba.npz
 
 
 1-4: standard data  
