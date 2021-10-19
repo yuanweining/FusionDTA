@@ -3,7 +3,6 @@ from __future__ import print_function,division
 import numpy as np
 import torch
 import torch.utils.data
-from src.getdata import smile_to_graph, smile_to_label
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 import re
 import csv
@@ -12,6 +11,22 @@ import copy
 from math import sqrt
 from scipy import stats
 import torch.nn.functional as F
+
+device_ids = [0, 1, 2, 3]
+
+def r_squared_error(y_obs,y_pred):
+    y_obs = np.array(y_obs)
+    y_pred = np.array(y_pred)
+    y_obs_mean = [np.mean(y_obs) for y in y_obs]
+    y_pred_mean = [np.mean(y_pred) for y in y_pred]
+
+    mult = sum((y_pred - y_pred_mean) * (y_obs - y_obs_mean))
+    mult = mult * mult
+
+    y_obs_sq = sum((y_obs - y_obs_mean)*(y_obs - y_obs_mean))
+    y_pred_sq = sum((y_pred - y_pred_mean) * (y_pred - y_pred_mean) )
+
+    return mult / float(y_obs_sq * y_pred_sq)
 
 def kd_loss(guide, hint, outputs, labels, alpha=0.2):
         KD_loss = F.mse_loss(guide, hint) * \
@@ -94,11 +109,13 @@ def load_protvec(filename):
 	key_aa["zero"] = count
 	return protvec, key_aa
 
+    
 class DrugTargetDataset(torch.utils.data.Dataset):
-    def __init__(self, X0, X1, Y, is_target_pretrain=True, is_drug_pretrain=False, self_link=True, dataset='davis'):
+    def __init__(self, X0, X1, Y, pid, is_target_pretrain=True, is_drug_pretrain=False, self_link=True, dataset='davis'):
         self.X0 = X0 #graph
         self.X1 = X1 #protein
         self.Y = Y
+        self.pid = pid
         self.smilebet = Smiles()
         smiles = copy.deepcopy(self.X0)
         smiles = [x.encode('utf-8').upper() for x in smiles]
@@ -106,27 +123,16 @@ class DrugTargetDataset(torch.utils.data.Dataset):
         self.X2 = smiles #smiles
         self.is_target_pretrain = is_target_pretrain
         self.is_drug_pretrain = is_drug_pretrain
-        self.self_link = self_link
-        if is_target_pretrain:
-            self.lookup_table, self.key = load_protvec('data/protVec_100d_3grams.csv')
-        if is_drug_pretrain:
-            self.local_dict = np.load('./data/pre_' + dataset + '_smileVec.npy', allow_pickle=True).item()
+        z = np.load(str(dataset)+'.npz',allow_pickle=True)
+        self.z = z['dict'][()]
 
     def __len__(self):
         return len(self.X0)
 
     def __getitem__(self, i):
-        prot = self.X1[i]
-        if self.is_target_pretrain:
-            split_list = split_text(prot, 3)
-            pre_prot = []
-            for word in split_list:
-                pre_prot.append(np.array(self.lookup_table[self.key[word]]))
-            for j in range(2):
-                split_list = split_text(prot[j+1:], 3)
-                for k, word in enumerate(split_list):
-                    pre_prot[k] += np.array(self.lookup_table[self.key[word]])
-            prot = torch.from_numpy(np.array(pre_prot, dtype=np.float32))
+        prot = (i,self.X1[i])
+        prot = torch.from_numpy(self.z[self.pid[i]]).squeeze()
+        #print(prot.shape)
         return [prot, self.X2[i], self.Y[i]]
 
 
@@ -182,7 +188,7 @@ def graph_pad(x, maxsize):
     for i in range(b):
         a = x[i]
         out[i,:a.shape[0],:] = a
-    return out.cuda()
+    return out.cuda(device=a.device)
 
 def ci(y,f):
     ind = np.argsort(y)

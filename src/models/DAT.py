@@ -13,6 +13,8 @@ from src.utils import pack_sequences, pack_pre_sequences, unpack_sequences, spli
 from torch.nn.utils.rnn import pack_padded_sequence ,pad_packed_sequence
 import torch.nn.functional as F
 
+device_ids = [0,1,2,3]
+
 class DAT3(nn.Module):
     def __init__(self, embedding_dim, rnn_dim, hidden_dim, graph_dim, dropout_rate, 
                      alpha, n_heads, graph_input_dim=78, rnn_layers=2, n_attentions=1, 
@@ -35,10 +37,10 @@ class DAT3(nn.Module):
         
         #SMILES
         self.smiles_vocab = smile_vocab
-        self.smiles_embed = nn.Embedding(smile_vocab+1, embedding_dim, padding_idx=smile_vocab)
+        self.smiles_embed = nn.Embedding(smile_vocab+1, 256, padding_idx=smile_vocab)
         self.rnn_layers = 2
         self.is_bidirectional = True
-        self.smiles_input_fc = nn.Linear(embedding_dim, rnn_dim)
+        self.smiles_input_fc = nn.Linear(256, rnn_dim)
         self.smiles_rnn = nn.LSTM(rnn_dim, rnn_dim, self.rnn_layers, batch_first=True
                       , bidirectional=self.is_bidirectional, dropout=dropout_rate)
         self.smiles_out_fc = nn.Linear(rnn_dim*2, rnn_dim)
@@ -88,11 +90,6 @@ class DAT3(nn.Module):
         if self.is_pretrain:
             protein_lengths = np.array([x.shape[0] for x in protein])
             protein = graph_pad(protein, max(protein_lengths))
-        else:
-            protein_lengths = np.array([len(x) for x in protein])
-            protein, protein_order = pack_sequences(protein, protein_lengths, padding_idx = self.vocab)
-            lengths = protein_lengths[protein_order]
-            h = self.embed(protein)
         
         h = self.sentence_input_fc(protein)
         sentence_out, _ = self.encode_rnn(h)
@@ -121,7 +118,7 @@ class DAT3(nn.Module):
         for e_id, drug_len in enumerate(adj_sizes):
             out[e_id, drug_len : max_size] = 0
         out = out.unsqueeze(1).expand(-1, n_heads, -1)
-        return out.cuda()
+        return out.cuda(device=adj.device)
     
     def generate_out_masks(self, drug_sizes, adj, masks, source_lengths, n_heads):
         adj_size = adj.shape[2]
@@ -134,7 +131,7 @@ class DAT3(nn.Module):
             out[e_id, drug_len : adj_size] = 0
             out[e_id, adj_size + src_len:] = 0
         out = out.unsqueeze(1).expand(-1, n_heads, -1) 
-        return out.cuda()  
+        return out.cuda(device=adj.device)
 
         
 
