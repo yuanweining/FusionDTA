@@ -1,7 +1,7 @@
 # FusionDTA: attention-based feature polymerizer and knowledge distillation for drug–target binding affinity prediction
 
 ## Data Preprocess
-You first need to generate the standard data, cold-start data and 5-fold cross-validation data from raw data. 
+You first need to generate the standard data, cold-start data and 5-fold cross-validation data from raw data.   
 Run command as follows:
     
     python datahelper.py
