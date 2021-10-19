@@ -33,7 +33,7 @@ Then you can generate the csv data locally by commenting out line 70：
 
     generate_protein_pretraining_presentation(dataset, prots)  
     
-or download generated data from [daata.zip](https://drive.google.com/file/d/1evKHwYmUkpJAR_BWK-WTMASKx3Fcivn0/view?usp=sharing).
+or download generated data from [data.zip](https://drive.google.com/file/d/1evKHwYmUkpJAR_BWK-WTMASKx3Fcivn0/view?usp=sharing).
 
 ## Training
 First you should create a new folder for saved models, path = "FusionDTA/saved_models".  
