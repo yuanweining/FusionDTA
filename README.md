@@ -28,27 +28,27 @@ Then you will get the following files:
 
 ## Training
 First you should create a new folder for saved models, path = "FusionDTA/saved_models".  
-then run command below to train FusionDTA.
+Then run command below to train FusionDTA.
 
     python training.py
   
-## cold-start
+## Cold-start
 Under the constraints of cold-start, FusionDTA can only predict binding affinity from unseen protein, unseen drug and both of them.  
-run command below to train drug cold-start.
+Run command below to train drug cold-start.
 
     python training_drug_cold.py
     
-run command below to train protein cold-start.
+Run command below to train protein cold-start.
 
     python training_protein_cold.py
     
-run command below to train protein-drug cold-start.
+Run command below to train protein-drug cold-start.
 
     python training_drug_protein_cold.py
 
   
 ## testing
-run command below for validation.
+Run command below for validation.
 
     python validating.py 
 
