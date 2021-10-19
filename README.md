@@ -27,13 +27,13 @@ Then you will get the following files:
 11-12: protein presentation from pretraining model namely esm-1b (https://github.com/facebookresearch/esm).
 
 tips: Perhaps you don't have enough CUDA memory to generate the pretrained representation of the protein, hence we provide a cloud address for the protein representation file.  
-[davis](https://drive.google.com/file/d/1EF4MdCPJ_8bWgdABK_GTKbTqROYtObv6/view?usp=sharing)  
-[kiba](https://drive.google.com/file/d/1V0DRxVpfdle91-yiUdZ7LtVZ_YsAodPi/view?usp=sharing).  
+[davis.npz](https://drive.google.com/file/d/1EF4MdCPJ_8bWgdABK_GTKbTqROYtObv6/view?usp=sharing)  
+[kiba.npz](https://drive.google.com/file/d/1V0DRxVpfdle91-yiUdZ7LtVZ_YsAodPi/view?usp=sharing)
 Then you can generate the csv data locally by commenting out line 70： 
 
     generate_protein_pretraining_presentation(dataset, prots)  
     
-or download generated data from ().
+or download generated data from [DAT_best_davis.pkl](https://drive.google.com/file/d/1FfFLPhM2-97qvgkzcTiU30PluRPCm6vU/view?usp=sharing).
 
 ## Training
 First you should create a new folder for saved models, path = "FusionDTA/saved_models".  
@@ -63,7 +63,7 @@ Run command below for validation.
 
 ## Knowledge distillation
 First you should create a folder for pretrained models, path = "FusionDTA/pretrained_models".  
-Then download pretrianed models from https://diuyourmouse.cn/FusionDTA/training_best.pkl, or just use the trained model from "FusionDTA/save_models".  
+Then download pretrianed models from [DAT_best_davis.pkl](https://drive.google.com/file/d/1FfFLPhM2-97qvgkzcTiU30PluRPCm6vU/view?usp=sharing), or just use the trained model from "FusionDTA/save_models".  
 run command below to train FusionDTA-KD.
 
     python training_KD.py
