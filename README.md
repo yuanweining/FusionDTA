@@ -1,7 +1,7 @@
 # FusionDTA: attention-based feature polymerizer and knowledge distillation for drug–target binding affinity prediction
 
 ## Data Preprocess
-You first need to generate the standard data, cold-start data and 5-fold cross-validation data from raw data.   
+You first need to generate the standard data, cold-start data, 5-fold cross-validation data and protein representation from raw data.   
 Run command as follows:
     
     python datahelper.py
@@ -24,14 +24,14 @@ Then you will get the following files:
 1-4: standard data  
 5-6: cold-start data  
 7-10: 5-fold cross-validation data  
-11-12: protein presentation from pretraining model namely esm-1b (https://github.com/facebookresearch/esm).
+11-12: protein representation from pretraining model namely esm-1b (https://github.com/facebookresearch/esm).
 
 Tips: Perhaps you don't have enough CUDA memory to generate the pretrained representation of the protein, hence we provide a cloud address for the protein representation file.  
 [davis.npz](https://drive.google.com/file/d/1EF4MdCPJ_8bWgdABK_GTKbTqROYtObv6/view?usp=sharing)  
 [kiba.npz](https://drive.google.com/file/d/1V0DRxVpfdle91-yiUdZ7LtVZ_YsAodPi/view?usp=sharing)  
 Then you can generate the csv data locally by commenting out line 70： 
 
-    generate_protein_pretraining_presentation(dataset, prots)  
+    generate_protein_pretraining_representation(dataset, prots)  
     
 or download generated data from [data.zip](https://drive.google.com/file/d/1evKHwYmUkpJAR_BWK-WTMASKx3Fcivn0/view?usp=sharing).
 
