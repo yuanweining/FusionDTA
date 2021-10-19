@@ -33,6 +33,21 @@ then run command below to train FusionDTA.
 
     python training.py
   
+## cold-start
+Under the constraints of cold-start, FusionDTA can only predict binding affinity from unseen protein, unseen drug and both of them. 
+run command below to train drug cold-start.
+
+    python training_drug_cold.py
+    
+run command below to train protein cold-start.
+
+    python training_protein_cold.py
+    
+run command below to train protein-drug cold-start.
+
+    python training_drug_protein_cold.py
+
+  
 ## testing
 run command below for validation.
 
