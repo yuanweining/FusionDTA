@@ -21,10 +21,10 @@ Then you will get the following files:
 * kiba.npz
 
 
-1-4: standard data \n
-5-6: cold-start data \n
-7-10: 5-fold cross-validation data \n
-11-12: protein presentation from pretraining model(esm-1b). \n 
+1-4: standard data  
+5-6: cold-start data  
+7-10: 5-fold cross-validation data  
+11-12: protein presentation from pretraining model(esm-1b).  
 
 ## Training
 First you should create a new folder for trained models, path = "FusionDTA/save_models".
