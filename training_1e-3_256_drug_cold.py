@@ -3,9 +3,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.utils.data
-from src.getdata import getdata_from_csv
+from src.getdata import getdata_from_csv, get_cold_data_from_csv
 from src.utils import DrugTargetDataset, collate, AminoAcid, ci
 from src.models.DAT import DAT3
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--cuda', default=True, help='Disables CUDA training.')
@@ -22,8 +23,7 @@ parser.add_argument('--dropout', type=float, default=0.3, help='Dropout rate (1 
 parser.add_argument('--alpha', type=float, default=0.2, help='Alpha for the leaky_relu.')
 parser.add_argument('--pretrain', action='store_false', help='protein pretrained or not')
 parser.add_argument('--dataset', default='davis', help='dataset: davis or kiba')
-parser.add_argument('--training-dataset-path', default='data/davis_train.csv', help='training dataset path: davis or kiba/ 5-fold or not')
-parser.add_argument('--testing-dataset-path', default='data/davis_test.csv', help='training dataset path: davis or kiba/ 5-fold or not')
+parser.add_argument('--training-dataset-path', default='data/davis_cold.csv', help='training dataset path: davis or kiba/ 5-fold or not')
 
 args = parser.parse_args()
 dataset = args.dataset
@@ -48,35 +48,48 @@ is_pretrain = args.pretrain
 Alphabet = AminoAcid()
 
 training_dataset_address = args.training_dataset_path
-testing_dataset_address = args.testing_dataset_path
+
 
 #processing training data
 if is_pretrain:
-    train_drug, train_protein, train_affinity, pid = getdata_from_csv(training_dataset_address, maxlen=1536)
+    drug, protein, affinity, pid, did = get_cold_data_from_csv(training_dataset_address, maxlen=1536)
 
 else:
     train_drug, train_protein, train_affinity = getdata_from_csv(training_dataset_address, maxlen=1024)
     train_protein = [x.encode('utf-8').upper() for x in train_protein]
     train_protein = [torch.from_numpy(Alphabet.encode(x)).long() for x in train_protein]
-train_affinity = torch.from_numpy(np.array(train_affinity)).float()
 
-dataset_train = DrugTargetDataset(train_drug, train_protein, train_affinity, pid, is_target_pretrain=is_pretrain, self_link=False,dataset=dataset)
+affinity = torch.from_numpy(np.array(affinity)).float()
+pid_length = max(pid)
+did_length = max(did)
+did_sample = random.sample(list(range(did_length)), int(did_length/5))
+print(did_sample)
+
+train_drug, train_protein, train_affinity, train_pid, train_did = [], [], [], [], []
+test_drug, test_protein, test_affinity, test_pid, test_did = [], [], [], [], []
+for i in range(len(drug)):
+    if did[i] in did_sample:
+        test_drug.append(drug[i])
+        test_protein.append(protein[i])
+        test_affinity.append(affinity[i])
+        test_pid.append(pid[i])
+        test_did.append(did[i])
+    else:
+        train_drug.append(drug[i])
+        train_protein.append(protein[i])
+        train_affinity.append(affinity[i])
+        train_pid.append(pid[i])
+        train_did.append(did[i])
+
+
+dataset_train = DrugTargetDataset(train_drug, train_protein, train_affinity, train_pid, is_target_pretrain=is_pretrain, self_link=False,dataset=dataset)
 dataloader_train = torch.utils.data.DataLoader(dataset_train
                                                 , batch_size=batch_size
                                                 , shuffle=True
                                                 , collate_fn=collate
                                                 )
 
-#processing testing data
-if is_pretrain:
-    test_drug, test_protein, test_affinity, pid = getdata_from_csv(testing_dataset_address, maxlen=1536)
-else:
-    test_drug, test_protein, test_affinity = getdata_from_csv(testing_dataset_address, maxlen=1024)
-    test_protein = [x.encode('utf-8').upper() for x in test_protein]
-    test_protein = [torch.from_numpy(Alphabet.encode(x)).long() for x in test_protein]
-test_affinity = torch.from_numpy(np.array(test_affinity)).float()
-
-dataset_test = DrugTargetDataset(test_drug, test_protein, test_affinity, pid, is_target_pretrain=is_pretrain, self_link=False,dataset=dataset)
+dataset_test = DrugTargetDataset(test_drug, test_protein, test_affinity, test_pid, is_target_pretrain=is_pretrain, self_link=False,dataset=dataset)
 dataloader_test = torch.utils.data.DataLoader(dataset_test
                                                 , batch_size=batch_size
                                                 , shuffle=True
@@ -143,7 +156,7 @@ for epoch in range(epochs):
                                                                     , c_index
                                                                     
                      , end='\r'))
-    
+        
     print('total_loss={:.5f}, total_ci={:.5f}\n'.format(np.mean(total_loss), np.mean(total_ci)))
     
     model.eval()
@@ -183,11 +196,13 @@ for epoch in range(epochs):
             , end='\r')
     
     
-
-    all_ci = ci(total_label.detach().numpy().flatten(),total_pred.detach().numpy().flatten())
-
+    if epoch < 1000:
+        all_ci = np.mean(total_ci)
+    else:
+        all_ci = ci(total_label.detach().numpy().flatten(),total_pred.detach().numpy().flatten())
+        
     print('total_loss={:.5f}, total_ci={:.5f}\n'.format(np.mean(total_loss), all_ci))
-    save_path = 'saved_models/DAT_best_davis.pkl'
+    save_path = 'saved_models/DAT_best_davis_1e-3_256_drug_cold.pkl'
     if all_ci > best_ci:
         best_ci = all_ci
         model.cpu()
