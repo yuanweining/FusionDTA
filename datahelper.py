@@ -9,7 +9,7 @@ import esm
 import torch
 from rdkit import Chem
 
-def generate_protein_pretraining_presentation(dataset, prots):
+def generate_protein_pretraining_representation(dataset, prots):
     data_dict = {}
     prots_tuple = [(str(i), prots[i][:1022]) for i in range(len(prots))]
     model, alphabet = esm.pretrained.esm1b_t33_650M_UR50S()
@@ -67,7 +67,7 @@ for dataset in datasets:
         affinity = [-np.log10(y/1e9) for y in affinity]
 
     # protein pretraing presentation
-    generate_protein_pretraining_presentation(dataset, prots)
+    generate_protein_pretraining_representation(dataset, prots)
 
     affinity = np.asarray(affinity)
     opts = ['train','test']
