@@ -28,12 +28,12 @@ Then you will get the following files:
 
 tips: Perhaps you don't have enough CUDA memory to generate the pretrained representation of the protein, hence we provide a cloud address for the protein representation file.  
 [davis.npz](https://drive.google.com/file/d/1EF4MdCPJ_8bWgdABK_GTKbTqROYtObv6/view?usp=sharing)  
-[kiba.npz](https://drive.google.com/file/d/1V0DRxVpfdle91-yiUdZ7LtVZ_YsAodPi/view?usp=sharing)
+[kiba.npz](https://drive.google.com/file/d/1V0DRxVpfdle91-yiUdZ7LtVZ_YsAodPi/view?usp=sharing)  
 Then you can generate the csv data locally by commenting out line 70： 
 
     generate_protein_pretraining_presentation(dataset, prots)  
     
-or download generated data from [DAT_best_davis.pkl](https://drive.google.com/file/d/1FfFLPhM2-97qvgkzcTiU30PluRPCm6vU/view?usp=sharing).
+or download generated data from [daata.zip](https://drive.google.com/file/d/1evKHwYmUkpJAR_BWK-WTMASKx3Fcivn0/view?usp=sharing).
 
 ## Training
 First you should create a new folder for saved models, path = "FusionDTA/saved_models".  
