@@ -24,7 +24,7 @@ Then you will get the following files:
 1-4: standard data  
 5-6: cold-start data  
 7-10: 5-fold cross-validation data  
-11-12: protein presentation from pretraining model ([esm-1b] (https://github.com/facebookresearch/esm)).
+11-12: protein presentation from pretraining model [esm-1b] (https://github.com/facebookresearch/esm).
 
 tips: Perhaps you don't have enough CUDA memory to generate the pretrained representation of the protein, hence we provide a cloud address for the protein representation file (). Then you can generate the csv data locally by commenting out line 70： 
 
