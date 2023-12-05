@@ -69,3 +69,5 @@ run command below to train FusionDTA-KD.
     python training_KD.py
     
 You can test different scales of parameters of the student model, by setting different arguments in parser.
+
+> 现在回头来看这篇论文，简直是捡了芝麻丢了西瓜，原因是我没有对冷启动问题进行深入的思考和研究，却执着于追求准确率。从冷启动的结果看来，其实本文的模型学习到的是结合亲和力在特定数据集内的分布，并没有太强的泛化能力，如果有人能够深入研究预训练模型学习到的分布和特定下游任务之间的关系，让创造出的下游模型能够继承预训练模型的泛化能力，学习到结合亲和力在此类问题的分布，那就非常有价值和意义了。
